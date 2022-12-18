@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model ML.Alumno
+
+<div class="container">
+    <div class="row">
+        <div class="text-center">
+            <h2>Alumnos</h2>
+        </div>
+    </div>
+
+    <div class="row align-items-center">
+        <div class="col">
+            <h5>Bienvenidos a la pestaña Alumnos</h5>
+            <p>Seleccione un alumno para editarlo o "+"" para agregar.</p>
+        </div>
+
+        <div class="col" , style="float:right;">
+            <div style="float:right">
+                @Html.ActionLink("+","Form","Alumno", htmlAttributes: new {@class = "btn btn-success"})
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    @using (Html.BeginForm("GetAll", "Alumno", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <h5>Búsqueda abierta por tipo de beca:</h5>
+        <div class="row align-items-center">
+            <div class="col-md-3">
+                <input name="BecasBusqueda" type="checkbox" value="1" /> Ninguna
+            </div>
+            <div class="col-md-3">
+                <input name="BecasBusqueda" type="checkbox" value="2" /> Cultural
+            </div>
+             <div class="col-md-3">
+                <input name="BecasBusqueda" type="checkbox" value="3" /> Deportiva
+            </div>
+            <div class="col-md-3">
+                <input type="submit" value="Buscar" class="btn btn-primary" />
+            </div>
+
+        </div>
+    }
+    <hr />
+
+    <div class="row">
+        <table class="table table-hover table-responsive align-middle" id="tablaAlumno">
+
+            <thead class="table table-dark text-center">
+                <tr class="align-middle">
+                    <th>Editar</th>
+                    <th>Nombre</th>
+                    <th>Género</th>
+                    <th>Edad</th>
+                    <th>Beca</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (ML.Alumno alumno in Model.Alumnos)
+                {
+                    <tr>
+                        <td><a class="btn btn-warning" href="@Url.Action("Form", "Alumno", new {IdAlumno = alumno.IdAlumno})"><i class="bi bi-pencil-square"></i></a></td>
+                        <td>@alumno.Nombre @alumno.ApellidoPaterno @alumno.ApellidoMaterno</td>
+                        @if (alumno.Genero)
+                        {
+                            <td>Masculino</td>
+                        }else
+                        {
+                            <td>Femenino</td>
+                        }
+                        <td>@alumno.Edad años</td>
+                        <td>@alumno.Beca.Nombre</td>
+                        <td class="text-center"><a class="btn btn-danger" href="@Url.Action("Delete", "Alumno", new {IdAlumno = alumno.IdAlumno})" onclick="return confirm('¿Estás seguro que deseas eliminar el alumno?');"><i class="bi bi-trash-fill"></i></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<hr />
+
+@section Scripts
+    {
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.material.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#tablaAlumno').DataTable({
+                searching: false,
+                "lengthMenu": [[5, 10, 15, 20, -1], [5, 10, 15, 20, "Todos"]],
+                autoWidth: false,
+                columnDefs: [
+                    {
+                        targets: ['_all'],
+                        className: 'mdc-data-table__cell',
+                    },
+                ],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json",
+                },
+             });
+        });
+    </script>
+
+}

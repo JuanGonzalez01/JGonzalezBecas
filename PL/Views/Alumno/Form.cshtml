@@ -1,0 +1,143 @@
+﻿@model ML.Alumno
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Formulario para Alumno</h2>
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+            @using (Html.BeginForm("Form", "Alumno", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="form-group" style="display :none;">
+                            @Html.LabelFor(Model => Model.IdAlumno, new { @class = "form-control" })
+                            @Html.TextBoxFor(Model => Model.IdAlumno, new { @class = "form-control"})
+                        </div>
+                        <div class="col-md-2"></div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("Nombre:")
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person-circle"></i></span>
+                                    @Html.TextBoxFor(Model => Model.Nombre, new { @class = "form-control", placeholder = "Nombre(s)", @id = "txtNombre" , @onkeypress = "return SoloLetras(event,'lblNombre')"})
+                                </div>
+                                @Html.Label("",null, new {@id="lblNombre"})
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Apellido paterno:")
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                                    @Html.TextBoxFor(Model => Model.ApellidoPaterno, new { @class = "form-control", @id = "txtApellidoPaterno", @onkeypress = "return SoloLetras(event,'lblApellidoPaterno')" })
+                                </div>
+                                @Html.Label("",null, new {@id="lblApellidoPaterno"})
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Apellido materno:")
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                                    @Html.TextBoxFor(Model => Model.ApellidoMaterno, new { @class = "form-control", @id = "txtApellidoMaterno", @onkeypress = "return SoloLetras(event,'lblApellidoMaterno')" })
+                                </div>
+                                @Html.Label("",null, new {@id="lblApellidoMaterno"})
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.Label("Género:")
+                                <div class="row">
+                                    <div class="col-4">
+                                        @Html.RadioButtonFor(Model => Model.Genero, true)
+                                        Masculino
+                                    </div>
+                                    <div class="col-4">
+                                        @Html.RadioButtonFor(Model => Model.Genero, false)
+                                        Femenino
+                                    </div>
+                                </div>
+                                @Html.Label("",null, new {@id="lblGenero"})
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Edad: 15-18 años")
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
+                                    @Html.TextBoxFor(Model => Model.Edad, new { @class = "form-control", @id = "txtEdad", type = "number", min = "15", max="18" })
+                                </div>
+                                @Html.Label("",null, new {@id="lblEdad"})
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Beca:")
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-award-fill"></i></span>
+                                    @Html.DropDownListFor(model => model.Beca.IdBeca, new SelectList(Model.Beca.Becas, "IdBeca", "Nombre"), "- Selecciona una beca", new { id = "ddlBeca", @class = "form-control" })
+                                </div>
+                                @Html.Label("",null, new {@id="lblBeca"})
+                            </div>
+                        </div>
+
+                        <div class="col-md-2"></div>
+                    </div>
+
+                    <br />
+                    <div class="row justify-content-md-center">
+                        <div class="col-md-auto">
+                            <input type="submit" value="Guardar" class="btn btn-success btn-lg" />
+                            @Html.ActionLink("Regresar", "GetAll", "Alumno", htmlAttributes: new { @class = "btn btn-danger btn-lg" })
+
+                        </div>
+                    </div>
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script type="text/javascript">
+
+        function SoloLetras(e, controlId) {
+            var caracter = e.key;
+            if (controlId == "lblNombre") {
+                if (!/^[A-ZÄËÏÖÜÁÉÍÓÚÂÊÎÔÛÀÈÌÒÙÑa-zäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙñ\s]+/g.test(caracter)) {
+                    $('#' + controlId).text("Sólo se aceptan letras.");
+                    $('#' + controlId).css({ "color": "red" });
+                    return false;
+                }
+                else {
+                    $('#' + controlId).text("");
+                    return true;
+                }
+            }
+            else {
+                if (!/^[A-ZÄËÏÖÜÁÉÍÓÚÂÊÎÔÛÀÈÌÒÙÑa-zäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙñ]/g.test(caracter)) {
+                    $('#' + controlId).text("Sólo se aceptan letras.");
+                    $('#' + controlId).css({ "color": "red" });
+                    return false;
+                }
+                else {
+                    $('#' + controlId).text("");
+                    return true;
+                }
+            }
+
+        }
+
+    </script>
+}
